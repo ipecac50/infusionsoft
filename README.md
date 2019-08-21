@@ -93,10 +93,11 @@ var client = new iSDK('app_name', 'api_key');
 
 **InvoiceService.createInvoiceForRecurring**: ```client.createInvoiceForRecurring(recurringOrderId, callback)```
 
+**InvoiceService.deleteInvoice**: ```client.deleteInvoice(invoiceId, callback)```
+
 **InvoiceService.locateExistingCard**: ```client.locateCard(contactId, lastFour, callback)```
 
 **InvoiceService.validateCreditCard**: ```client.validateCard(card, callback)```
-
 
 
 **OrderService.placeOrder**: ```client.placeOrder(contactId, creditCardId, payPlanId, productIds, subscriptionIds, processSpecials, promocodes, callback)```

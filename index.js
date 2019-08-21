@@ -5,13 +5,13 @@ var iSDK = module.exports = function (appname, apikey, handler) {
 
 	this.appName = appname;
 	this.apiKey = apikey;
-	this.responseHandler = handler || function () {};
+	this.responseHandler = handler || function () { };
 	this.client = xmlrpc.createSecureClient('https://' + this.appName + '.infusionsoft.com/api/xmlrpc');
 
 };
 
 iSDK.prototype.methodCaller = function (service, data, callback) {
-	var cb = (typeof(callback) === 'function') ? callback : this.responseHandler;
+	var cb = (typeof (callback) === 'function') ? callback : this.responseHandler;
 	this.client.methodCall(service, data, cb);
 };
 
@@ -25,7 +25,7 @@ iSDK.prototype.addCon = function (cMap, callback) {
 	this.methodCaller('ContactService.add', ca, callback);
 };
 
-iSDK.prototype.updateCon = function (cId, cMap, callback){
+iSDK.prototype.updateCon = function (cId, cMap, callback) {
 	var ca = [this.apiKey, cId, cMap];
 	this.methodCaller('ContactService.update', ca, callback);
 };
@@ -85,13 +85,13 @@ iSDK.prototype.dsAdd = function (tableName, fields, callback) {
 	this.methodCaller('DataService.add', ca, callback);
 };
 
-iSDK.prototype.dsCount = function(tableName, query, callback) {
-    var ca = [this.apiKey, tableName, query];
-    this.methodCaller('DataService.count', ca, callback);
+iSDK.prototype.dsCount = function (tableName, query, callback) {
+	var ca = [this.apiKey, tableName, query];
+	this.methodCaller('DataService.count', ca, callback);
 };
 
-iSDK.prototype.dsDelete = function (tableName, id, callback){
-	id = (typeof(id) === 'number') ? id : parseInt(id, 10);
+iSDK.prototype.dsDelete = function (tableName, id, callback) {
+	id = (typeof (id) === 'number') ? id : parseInt(id, 10);
 	if (isNaN(id)) return callback(new Error('id should be an integer'));
 
 	var ca = [this.apiKey, tableName, id];
@@ -99,7 +99,7 @@ iSDK.prototype.dsDelete = function (tableName, id, callback){
 };
 
 iSDK.prototype.dsUpdate = function (tableName, id, uFields, callback) {
-	id = (typeof(id) === 'number') ? id : parseInt(id, 10);
+	id = (typeof (id) === 'number') ? id : parseInt(id, 10);
 	if (isNaN(id)) return callback(new Error('id should be an integer'));
 
 	var ca = [this.apiKey, tableName, id, uFields];
@@ -107,7 +107,7 @@ iSDK.prototype.dsUpdate = function (tableName, id, uFields, callback) {
 };
 
 iSDK.prototype.dsLoad = function (tableName, id, rFields, callback) {
-	id = (typeof(id) === 'number') ? id : parseInt(id, 10);
+	id = (typeof (id) === 'number') ? id : parseInt(id, 10);
 
 	if (isNaN(id)) return callback(new Error('id should be an integer'));
 
@@ -117,7 +117,7 @@ iSDK.prototype.dsLoad = function (tableName, id, rFields, callback) {
 	// if rFields is an array, it is rFields
 	// otherwise the api call is invalid
 	if (!Array.isArray(rFields)) {
-		if (typeof(rFields) === 'function' && !callback) {
+		if (typeof (rFields) === 'function' && !callback) {
 			callback = rFields;
 			rFields = undefined;
 		} else return callback(new Error('rFields should be an Array'));
@@ -134,12 +134,12 @@ iSDK.prototype.dsFind = function (tableName, limit, page, field, value, rFields,
 };
 
 iSDK.prototype.dsQuery = function (tableName, limit, page, query, rFields, orderBy, ascending, callback) {
-	switch (arguments.length){
+	switch (arguments.length) {
 		case 8:
-			var ca = [this.apiKey,tableName, limit, page, query, rFields, orderBy, ascending];
+			var ca = [this.apiKey, tableName, limit, page, query, rFields, orderBy, ascending];
 			break;
 		case 6:
-			var ca = [this.apiKey,tableName, limit, page, query, rFields];
+			var ca = [this.apiKey, tableName, limit, page, query, rFields];
 			callback = orderBy;
 			break;
 	}
@@ -166,6 +166,11 @@ iSDK.prototype.createInvoiceForRecurring = function (recurringOrderId, callback)
 	this.methodCaller('InvoiceService.createInvoiceForRecurring', ca, callback);
 };
 
+iSDK.prototype.deleteInvoice = function (invoiceId, callback) {
+	var ca = [this.apiKey, invoiceId];
+	this.methodCaller('InvoiceService.deleteInvoice', ca, callback);
+};
+
 iSDK.prototype.calculateAmountOwed = function (invoiceId, callback) {
 	var ca = [this.apiKey, invoiceId];
 	this.methodCaller('InvoiceService.calculateAmountOwed', ca, callback);
@@ -177,7 +182,7 @@ iSDK.prototype.placeOrder = function (contactId, creditCardId, payPlanId, produc
 };
 
 iSDK.prototype.findProduct = function (id, rFields, callback) {
-	this.dsQuery('Product', 1, 0, {'Id': id}, rFields, callback);
+	this.dsQuery('Product', 1, 0, { 'Id': id }, rFields, callback);
 };
 
 iSDK.prototype.runAS = function (cid, asid, callback) {
@@ -192,7 +197,7 @@ iSDK.prototype.getEmailTemplate = function (id, callback) {
 
 iSDK.prototype.sendEmail = function (clist, fromAddr, toAddr, ccAddr, bccAddr, contentType, subject, htmlBody, textBody, templateId, callback) {
 	var ca = [this.apiKey, clist, fromAddr, toAddr, ccAddr, bccAddr, contentType, subject, htmlBody, textBody];
-	if (typeof(templateId) === 'number') ca.push(templateId);
+	if (typeof (templateId) === 'number') ca.push(templateId);
 	this.methodCaller('APIEmailService.sendEmail', ca, callback);
 };
 
@@ -202,7 +207,7 @@ iSDK.prototype.optStatus = function (email, callback) {
 };
 
 iSDK.prototype.validateCard = function (card, callback) {
-	var t = typeof(card);
+	var t = typeof (card);
 	if (!card || (t !== 'number' && t !== 'object')) callback(new Error('Expect first argument to be a number or an object'));
 	var ca = [this.apiKey, card];
 	this.methodCaller('InvoiceService.validateCreditCard', ca, callback);
@@ -213,7 +218,7 @@ iSDK.prototype.locateCard = function (contactId, lastFour, callback) {
 	this.methodCaller('InvoiceService.locateExistingCard', ca, callback);
 };
 
-iSDK.prototype.fsGoal = function(integration, name, contactId, callback){
+iSDK.prototype.fsGoal = function (integration, name, contactId, callback) {
 	var ca = [this.apiKey, integration, name, contactId];
 	this.methodCaller('FunnelService.achieveGoal', ca, callback);
 }
